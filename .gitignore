@@ -1,0 +1,4 @@
+app/__pycache__
+app/migrations/__pycache__
+figmatch/__pycache__
+app/views/__pycache__

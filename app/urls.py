@@ -2,10 +2,10 @@ from django.urls import path, include
 from .views import user_top, user_mem_reg, user_pass_reset, user_profile_inf, user_good_board,\
 user_item_list, user_join_fig, user_report, user_board_reg, board_inf, user_fig_reg, fig_inf,\
 visit_user_inf, shop, gloval_nav, user_setting, admin_top, admin_user_inf, point, fig_req_inf,\
-admin_inq, notice, admin_report, admin_inf, identification
+admin_inq, notice, admin_report, admin_inf, identification, common
 
 urlpatterns = [
-    ppath('F010_Top/', user_top.F010_Top, name='F010_Top'),
+    path('F010_Top/', user_top.F010_Top, name='F010_Top'),
     path('F020_userLogin/', user_top.F020_userLogin, name='F020_userLogin'),
     path('F030_userTop/', user_top.F030_userTop, name='F030_userTop'),
     path('F040_userMemReg/', user_mem_reg.F040_userMemReg, name='F040_userMemReg'),
@@ -82,4 +82,6 @@ urlpatterns = [
     path('F750_adminMemRegComp/', admin_inf.F750_adminMemRegComp, name='F750_adminMemRegComp'),
     path('F760_identification/', identification.F760_identification, name='F760_identification'),
     path('F770_identificationDet/', identification.F770_identificationDet, name='F770_identificationDet'),
+
+    path('common_logout/', common.common_logout, name='common_logout'),
 ]

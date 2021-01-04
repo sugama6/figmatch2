@@ -25,7 +25,7 @@ SECRET_KEY = '17r^tk6dqle@(45i&4@g+^gakp-9(j0$d11-3(ue43-v*5uzw0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.33.15']
 
 
 # Application definition
@@ -75,20 +75,32 @@ WSGI_APPLICATION = 'figmatch.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-
+import pymysql
+pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test',
-        'USER': 'postgres',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'figmatch',
+        'USER': 'root',
         'HOST':"localhost",
-        'PASSWORD': "Yakyu89Yusuke",
-        'PORT':'5432',
-    #     'OPTIONS': {
-    #        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-    #    },
+        'PASSWORD': "ais1234",
+        'PORT':'3306',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'test',
+#         'USER': 'postgres',
+#         'HOST':"localhost",
+#         'PASSWORD': "Yakyu89Yusuke",
+#         'PORT':'5432',
+#     #     'OPTIONS': {
+#     #        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#     #    },
+#     }
+# }
 
 
 # Password validation
@@ -128,3 +140,19 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#セッションの設定
+SESSION_COOKIE_AGE = 7200 #セッションの保持期間2時間
+SESSION_SAVE_EVERY_REQUEST = True #リクエストごとにセッション情報を更新
+
+#メール設定
+#メールを送信する場合
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#メールの内容をコンソールで確認
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'figmatch.info@gmail.com'
+DEFAULT_FROM_EMAIL = 'figmatch.info@gmail.com'
+EMAIL_HOST_PASSWORD = 'Figmatch100'
+EMAIL_USE_TLS = True

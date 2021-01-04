@@ -90,7 +90,27 @@ def common_current_time():
 def common_add_twomonth():
     time = timezone.now() + relativedelta(month=2)
     return time
-
+    
+#ファイルアップロード機能
+def common_uploaded_file(file, new_dir_path):
+    sys.stderr.write("*** handle_uploaded_file *** aaa ***\n")
+    sys.stderr.write(file.name + "\n")
+    file_name = file.name
+    extension = str(file_name).split('.')[-1]
+    hs_filename = '%s.%s' % (hashlib.md5(file_name.encode()).hexdigest(), extension)
+    #ステージング用
+    #dirs = '/home/www/figmatch/app/static/images'
+    #開発用
+    dirs = 'app/static/images'
+    os.makedirs(dirs + new_dir_path, exist_ok=True)
+    file_path = dirs + new_dir_path + hs_filename
+    sys.stderr.write(file_path + "\n")
+    with open(file_path, 'wb+') as destination:
+      for chunk in file.chunks():
+          sys.stderr.write("*** handle_uploaded_file *** ccc ***\n")
+          print(destination.write(chunk))
+          sys.stderr.write("*** handle_uploaded_file *** eee ***\n")
+          return '/static/images' + new_dir_path + hs_filename
 
 #pdfアップロード機能
 def common_uploaded_pdf(file, name):

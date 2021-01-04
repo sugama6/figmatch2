@@ -7,6 +7,11 @@
     padding: 15px 30px;
 }
 
+
+ul {
+  list-style: none;
+}
+
 .error {
     color: #ff0000;
 }
@@ -61,5 +66,20 @@
     height: 100%;
     background-color: rgba(0,0,0,.8);
     z-index: 1;
+    cursor: pointer;
+  }
+
+  .categoryAdd {
+    background-color: #cccccc;
+    cursor: pointer;
+    width: 50px;
+    text-align: center;
+  }
+
+  #deleteBtn2, #deleteBtn3 {
+    background-color: #ff0000;
+    color: #fff;
+    padding: 1.5px 5px;
+    margin: 5px;
     cursor: pointer;
   }

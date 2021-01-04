@@ -58,16 +58,21 @@ def F060_userMemRegComp(request):
     if request.method == 'POST':
         try:
             user = Users(
-                user_name = request.POST['user_name'],
+                nick_name = request.POST['nick_name'],
                 password = common_hashing(request.POST['password']),
                 acount_name = request.POST['acount_name'],
                 email_address = request.POST['email_address'],
+                silver = 1000,
                 insert_time = common_current_time(),
                 update_time = common_current_time(),
             )
             user.save()
             id = Users.objects.get(email_address=request.POST['email_address'])
             create_user_session(request, id.id)
+            params = {
+                'user': id,
+            }
+            return render(request, 'user_mem_reg/F060_userMemRegComp.html', params)
         except:
             return redirect('/F030_userTop')
     return render(request, 'user_mem_reg/F060_userMemRegComp.html')

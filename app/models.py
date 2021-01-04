@@ -1,11 +1,10 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
-from django.db import models
 from django.db.models import CharField, Model, IntegerField
+from django_mysql.models import ListCharField
 
 # Create your models here.
 class Users(models.Model):
-    user_name = models.CharField(max_length=20, verbose_name='名前')
+    nick_name = models.CharField(max_length=20, null=True, verbose_name='ニックネーム')
     password = models.CharField(max_length=70, verbose_name='パスワード')
     user_image = models.ImageField(verbose_name='プロフィール画像')
     lock_flg = models.BooleanField(default=0, verbose_name='ロック')
@@ -19,8 +18,8 @@ class Users(models.Model):
     sex = models.CharField(max_length=3, null=True, verbose_name='性別')
     sex_flg = models.BooleanField(default=0, verbose_name='性別公開フラグ')
     introduction = models.CharField(max_length=500, null=True, verbose_name='自己紹介')
-    category = ArrayField(
-        base_field=IntegerField(),
+    category = ListCharField(
+        base_field=CharField(max_length=100),
         size=50,
         null=True,
         max_length=(50 * 110),
@@ -31,19 +30,20 @@ class Users(models.Model):
     gold_point = models.IntegerField(default=0, verbose_name='保有ゴールドポイント')
     silver = models.IntegerField(default=0, verbose_name='保有シルバーポイント')
     gift = models.CharField(max_length=100, null=True, verbose_name='所有ギフト')
-    nick_name = models.CharField(max_length=20, null=True, verbose_name='ニックネーム')
     identification_status = models.BooleanField(default=0, verbose_name='本人確認ステータス')
     identification_image = models.ImageField(null=True, verbose_name='本人確認画像')
     insert_time = models.DateTimeField(verbose_name='登録日時')
     update_time = models.DateTimeField(verbose_name='更新日時')
 
+    def __str__(self):
+        return str(self.id)
 
 class Board(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='ユーザーID')
     board_title = models.CharField(max_length=30, verbose_name='タイトル')
-    category1 = models.IntegerField(verbose_name='カテゴリー1')
-    category2 = models.IntegerField(null=True, verbose_name='カテゴリー2')
-    category3 = models.IntegerField(null=True, verbose_name='カテゴリー3')
+    category1 = models.CharField(max_length=20, verbose_name='カテゴリー1')
+    category2 = models.CharField(max_length=20, null=True, verbose_name='カテゴリー2')
+    category3 = models.CharField(max_length=20, null=True, verbose_name='カテゴリー3')
     participation_conditions = models.CharField(max_length=100, verbose_name='参加条件')
     thumbnail = models.ImageField(verbose_name='サムネイル')
     wallpaper = models.CharField(max_length=60, null=True, verbose_name='壁紙')
@@ -59,8 +59,8 @@ class FIGmatch(models.Model):
     figmatch_name = models.CharField(max_length=30, verbose_name='FIGmatch名')
     user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='ユーザーID')
     thumbnail = models.ImageField(verbose_name='サムネイル')
-    category = ArrayField(
-        base_field=IntegerField(),
+    category = ListCharField(
+        base_field=CharField(max_length=100),
         size=50,
         null=True,
         max_length=(50 * 110),
@@ -146,7 +146,7 @@ class FIGmatchJoin(models.Model):
     insert_time = models.DateTimeField(verbose_name='登録日時')
     update_time = models.DateTimeField(verbose_name='更新日時')
 
-class adminUser(models.Model):
+class adminUsers(models.Model):
     user_name = models.CharField(max_length=30, verbose_name='ユーザー名')
     password = models.CharField(max_length=20, verbose_name='パスワード')
     lock_flg = models.BooleanField(verbose_name='ロック')
@@ -155,3 +155,28 @@ class adminUser(models.Model):
     insert_time = models.DateTimeField(verbose_name='登録日時')
     update_time = models.DateTimeField(verbose_name='更新日時')
 
+
+class exitReason(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='退会ユーザーID')
+    reason = models.CharField(max_length=500, verbose_name='退会理由')
+    del_flg = models.BooleanField(default=0, verbose_name='削除フラグ')
+    insert_time = models.DateTimeField(verbose_name='登録日時')
+    update_time = models.DateTimeField(verbose_name='更新日時')
+
+
+class passwordReset(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='ユーザーID')
+    token = models.CharField(max_length=65, verbose_name='乱数フィールド')
+    del_flg = models.BooleanField(default=0, verbose_name='削除フラグ')
+    effective_date = models.DateTimeField(verbose_name='有効日')
+    insert_time = models.DateTimeField(verbose_name='登録日時')
+    update_time = models.DateTimeField(verbose_name='更新日時')
+
+class MailChange(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='ユーザーID')
+    old_email_address = models.EmailField(verbose_name='旧メールアドレス')
+    new_email_address = models.EmailField(verbose_name='新メールアドレス')
+    auth_number = models.IntegerField(verbose_name='認証コード')
+    del_flg = models.BooleanField(default=0, verbose_name='削除フラグ')
+    insert_time = models.DateTimeField(verbose_name='登録日時')
+    update_time = models.DateTimeField(verbose_name='更新日時')

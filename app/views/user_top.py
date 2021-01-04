@@ -9,6 +9,7 @@ def F010_Top(request):
 
 
 def F020_userLogin(request):
+    request.session.clear()
     params = {
         'error': '',
     }
@@ -38,14 +39,18 @@ def F020_userLogin(request):
                 failed = Users.objects.get(email_address=email_address)
                 failed.lock_count += 1
                 failed.save()
+                count = 5 - failed.lock_count
                 #ロックカウントが5以上の時
                 if failed.lock_count >= 5:
                     failed.lock_flg = 1
                     failed.save()
                     params['error'] = 'ロックされました'
                     return render(request, 'user_top/F020_userLogin.html', params)
-            #IDもパスワードも一致しない時
-            params['error'] = 'メールアドレスもしくはパスワードが違います'
+                else:
+                    params['error'] = 'あと' + str(count) + '回間違えられます'
+            else:
+                #IDもパスワードも一致しない時
+                params['error'] = 'IDまたはパスワードが違います'
             return render(request, 'user_top/F020_userLogin.html', params)
     return render(request, 'user_top/F020_userLogin.html', params)
 

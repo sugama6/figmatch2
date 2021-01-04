@@ -3,8 +3,8 @@ from app.models import *
 from app.forms import *
 
 
-def F430_Privacy(request):
-    return render(request, 'gloval_nav/F430_Privacy.html')
+def F430_Notice(request):
+    return render(request, 'gloval_nav/F430_Notice.html')
 
 
 def F440_TermsOfService(request):
